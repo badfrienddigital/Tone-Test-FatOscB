@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+open http://localhost:8082
+livereload ~/softpunch/fatOfflineB/Tone-Test-FatOscB -p 8082
+
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+	<title>FatOscillator TestB</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="icon" type="image/png" sizes="174x174" href="./style/favicon.png">
+
+	<script src="Tone.js"></script>
+
+
+	<script>
+		// jshint ignore: start
+	</script>
+
+</head>
+<body>
+
+<input type="button" id="button" value="hello" onclick="theButton()" />
+
+<script>
+
+    var player = new Tone.Player().toMaster();
+    var button = document.getElementById('button');
+    button.value = "Rendering...";
+
+    Tone.Offline(function(Transport){
+
+      var synth = new Tone.Synth();
+      synth.toMaster();
+      synth.set({
+        "oscillator": {
+        "type": "fatsawtooth"
+      },
+        "envelope": {
+        "attack": 1,
+        "decay": 0.5,
+        "sustain": 1,
+        "release": 2
+        }
+      })
+
+      synth.oscillator.count = 6;
+
+      synth.triggerAttackRelease("G2", "2n");
+      synth.triggerAttackRelease("G1", "2n", "2n");
+
+}, 4).then(function(buffer){
+player.buffer = buffer;
+button.value = "Play"
+})
+
+function theButton(){
+  player.start();
+  button.value = "Playing?";
+};
+
+</script>
+
+</body>
+</html>
